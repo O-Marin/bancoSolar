@@ -26,4 +26,23 @@ const getUserQuery = async () =>{
     }catch(err){console.log(err)}
 }
 
-export {addUserQuery, getUserQuery};
+const updateUserQuery = async (nombre,balance,id) => {
+    try{
+        const updateUser = {
+            text:'update usuarios set nombre = $1, balance = $2 where id = $3 returning *',
+            values: [nombre,balance,id]
+        }
+        const result = await pool.query(updateUser)
+        //validacion de cambio
+        if(result.rowCount === 0){
+            throw new Error("No se edito el usuario");
+        } else {
+            result.rows[0];
+        }
+
+        console.log(result.rows);
+        return result.rows
+    }catch(err){console.log(err)}
+}
+
+export {addUserQuery, getUserQuery, updateUserQuery};
