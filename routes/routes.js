@@ -1,6 +1,6 @@
 import express from 'express'
 import path from 'path';
-import { addUserQuery, getUserQuery, updateUserQuery } from '../queries/consultas.js';
+import { addUserQuery, getUserQuery, updateUserQuery, deleteUserQuery } from '../queries/consultas.js';
 
 const router = express.Router()
 const __dirname = import.meta.dirname;
@@ -39,7 +39,20 @@ router.put('/usuario', async(req,res)=>{
     }catch(err){res.status(500).send(err)}
 })
 
+router.delete('/usuario', async (req,res)=>{
+    try{
+        const {id} = req.query;
+        const result = await deleteUserQuery(id);
+        res.status(201).send(result);
+    }catch(err){res.status(500).send(err)}
+})
 
+router.get('/transferencias', (req,res)=>{
+
+})
+router.post('/transferencia', (req,res)=>{
+    con
+})
  /* nos permite ver como se capturan los datos 
  console.log("query",req.query)
         console.log("params",req.params)
