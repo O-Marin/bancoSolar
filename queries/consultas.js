@@ -109,8 +109,7 @@ const addTransferQuery = async (datos) => {
 };
 
 const getTransferenciasQuery = async () => {
-  
-    try {
+  try {
     const getTransferencias = {
       text: `SELECT e.nombre 
       AS emisor,
@@ -120,10 +119,9 @@ const getTransferenciasQuery = async () => {
     FROM transferencias t
     JOIN usuarios e ON t.emisor = e.id
     JOIN usuarios r ON t.receptor = r.id;`,
-      rowMode:'array',
+      rowMode: "array",
     };
 
-    
     const result = await pool.query(getTransferencias);
     console.log(result.rows);
     return result.rows;

@@ -1,68 +1,35 @@
-import express from 'express'
-import path from 'path';
-import { addUserQuery, getUserQuery, updateUserQuery, deleteUserQuery,addTransferQuery, getTransferenciasQuery } from '../queries/consultas.js';
+import express from "express";
+import {
+  homeControl,
+  addUserControl,
+  getUserControl,
+  updateUserControl,
+  deleteUserControl,
+} from "../controllers/userControl.js";
+//control transferencias
+import {
+    addTransferControl,
+    getTransferenciasControl
+} from '../controllers/transferControl.js'
 
-const router = express.Router()
-const __dirname = import.meta.dirname;
+const router = express.Router();
 
-router.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname,'../views/index.html'))
-})
+router.get("/", homeControl);
 
-router.post('/usuario', async (req,res)=>{
-    try{
-        const {nombre,balance}= req.body;
-        const datos = [nombre,balance];
+router.post("/usuario", addUserControl);
 
-        const result = await addUserQuery(datos);
-        res.status(201).send(result.rows);
-    }catch(err){
-        res.status(500).send(err)
-    }
-})
+router.get("/usuarios", getUserControl);
 
-router.get('/usuarios', async (req,res)=>{
-    try{
-        const result = await getUserQuery();
-        res.status(201).json(result)
-    }catch(err){res.status(500).send(err)}
-    
-})
+router.put("/usuario", updateUserControl);
 
-router.put('/usuario', async(req,res)=>{
-    try{
-        const {id} = req.query
-        const {nombre,balance} = req.body
+router.delete("/usuario", deleteUserControl);
 
-        const result = await updateUserQuery(nombre,balance,id);
-        res.status(201).send(result)
-    }catch(err){res.status(500).send(err)}
-})
+router.post("/transferencia", addTransferControl);
 
-router.delete('/usuario', async (req,res)=>{
-    try{
-        const {id} = req.query;
-        const result = await deleteUserQuery(id);
-        res.status(201).send(result);
-    }catch(err){res.status(500).send(err)}
-})
+router.get("/transferencias", getTransferenciasControl);
 
-router.post('/transferencia', async (req,res)=>{
-    try{
-        const {emisor,receptor,monto} = req.body
-        const datos = [emisor,receptor,monto];
-        const result = await addTransferQuery(datos);
-        res.status(201).send(result)
-    }catch(err){res.status(500).send(err)} 
-})
 
-router.get('/transferencias', async(req,res)=>{
-    try{
-        const result = await getTransferenciasQuery();
-        res.status(201).json(result)
-    }catch(err){res.status(500).send(err)}
-})
- /* nos permite ver como se capturan los datos 
+/* nos permite ver como se capturan los datos 
  console.log("query",req.query)
         console.log("params",req.params)
         console.log("body",req.body) */
